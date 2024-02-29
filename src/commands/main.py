@@ -18,7 +18,10 @@ class Commands:
         if not user:
             create_user(username, first_name, last_name, chat_id)
 
-        bot.send_message(chat_id, f"Hello {first_name} {last_name}! I'm working")
+        bot.send_message(
+            chat_id,
+            f"Привіт, {first_name} {last_name} 👋 Мене звати бот-листоноша! \n\nСкориставшись командою /addsubscription ти можеш підписатись на відповідні теми у моїй газеті 📰 \n\nПісля підписки я почну приносити тобі газету кожного ранку о 9:00 ☀️ \n\nP.S. Натискай /addsubscription щоб переглянути доступні теми",
+        )
 
     @bot.message_handler(commands=["addsubscription"])
     def add_subscription(message):
@@ -30,4 +33,4 @@ class Commands:
             button = types.KeyboardButton(newspaper_subscription["subscription"])
             markup.add(button)
 
-        bot.send_message(chat_id, "Select a subscription type:", reply_markup=markup)
+        bot.send_message(chat_id, "Обирай тему 🗞", reply_markup=markup)

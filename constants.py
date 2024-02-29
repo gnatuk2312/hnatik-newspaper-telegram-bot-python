@@ -1,12 +1,19 @@
 class SubscriptionEnum:
-    WEATHER = "WEATHER"
-    CRYPTOCURRENCY = "CRYPTOCURRENCY"
+    WEATHER = "Погода"
+    CRYPTOCURRENCY = "Криптовалюта"
 
 
-PARAMS_CRYPTOCURRENCY = ["BTC", "ETH"]
-PARAMS_WEATHER = ["Ternopil", "Kyiv"]
+PARAMS_CRYPTOCURRENCY = ["BTC", "ETH", "BNB", "SOL", "XRP"]
+PARAMS_WEATHER = [
+    "Тернопіль",
+    "Львів",
+    "Івано-Франківськ",
+    "Київ",
+    "Дніпро",
+    "Запоріжжя",
+]
 
 NEWSPAPER_SUBSCRIPTIONS = [
-    {"subscription": SubscriptionEnum.CRYPTOCURRENCY, "params": PARAMS_CRYPTOCURRENCY},
     {"subscription": SubscriptionEnum.WEATHER, "params": PARAMS_WEATHER},
+    {"subscription": SubscriptionEnum.CRYPTOCURRENCY, "params": PARAMS_CRYPTOCURRENCY},
 ]

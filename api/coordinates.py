@@ -1,11 +1,11 @@
 import requests
 
-from config import API_NINJAS_TOKEN
+from config import API_NINJAS_KEY
 
 API_URL = "https://api.api-ninjas.com"
 headers = {
     "Accepts": "application/json",
-    "X-Api-Key": API_NINJAS_TOKEN,
+    "X-Api-Key": API_NINJAS_KEY,
 }
 
 
