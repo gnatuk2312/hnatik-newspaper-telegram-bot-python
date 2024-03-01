@@ -12,6 +12,13 @@ from api.newspaper_subscriptions import create_newspaper_subscription
 from api.cryptocurrency import get_cryptocurrency
 from api.weather import get_weather_by_coordinates
 from api.coordinates import get_coordinates_by_city
+from src.weather_subscription.main import (
+    get_weather_by_city,
+    construct_message_from_weather_data,
+)
+from src.cryptocurrency_subscription.main import (
+    construct_message_from_cryptocurrency_data,
+)
 
 
 class NewspaperSubscriptions:
@@ -60,12 +67,9 @@ class NewspaperSubscriptions:
             )
 
             cryptocurrency = get_cryptocurrency(currency).json()
-            price = cryptocurrency["data"][currency]["quote"]["USD"]["price"]
-
-            if round(price) > 1:
-                price = round(price)
-            else:
-                price = round(price, 4)
+            message = construct_message_from_cryptocurrency_data(
+                cryptocurrency, currency
+            )
 
             bot.send_message(
                 chat_id,
@@ -73,7 +77,7 @@ class NewspaperSubscriptions:
             )
             bot.send_message(
                 chat_id,
-                f"*{SubscriptionEnum.CRYPTOCURRENCY}* \n\nЦіна *{currency}* становить *{price}$*",
+                message,
                 parse_mode="Markdown",
             )
         except Exception as error:
@@ -99,23 +103,8 @@ class NewspaperSubscriptions:
             user = get_user_by_chat_id(chat_id).json()
             create_newspaper_subscription(SubscriptionEnum.WEATHER, city, user["id"])
 
-            coordinates = get_coordinates_by_city(city).json()
-            latitude = coordinates[0]["latitude"]
-            longitude = coordinates[0]["longitude"]
-
-            weather = get_weather_by_coordinates(latitude, longitude).json()
-            current = weather["current"]
-            units = weather["current_units"]
-
-            temperature = f'{current["temperature_2m"]}{units["temperature_2m"]}'
-            apparent_temperature = (
-                f'{current["apparent_temperature"]}{units["apparent_temperature"]}'
-            )
-            relative_humidity = (
-                f'{current["relative_humidity_2m"]}{units["relative_humidity_2m"]}'
-            )
-            cloud_cover = f'{current["cloud_cover"]}{units["cloud_cover"]}'
-            wind_speed = f'{current["wind_speed_10m"]}{units["wind_speed_10m"]}'
+            weather = get_weather_by_city(city)
+            message = construct_message_from_weather_data(weather, city)
 
             bot.send_message(
                 chat_id,
@@ -123,7 +112,7 @@ class NewspaperSubscriptions:
             )
             bot.send_message(
                 chat_id,
-                f"*{SubscriptionEnum.WEATHER}* \n\n*{city}*: \n• Температура: *{temperature}* (відчувається як *{apparent_temperature}*) \n• Хмарність неба: *{cloud_cover}* \n• Швидкість вітру: *{wind_speed}* \n• Відносна вологість: *{relative_humidity}*",
+                message,
                 parse_mode="Markdown",
             )
 
