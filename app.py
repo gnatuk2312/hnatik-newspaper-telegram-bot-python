@@ -3,9 +3,10 @@ import pycron
 from multiprocessing import Process
 
 from config import bot
-import src.cron.main
-import src.commands.main
-import src.newspaper_subscriptions.main
+
+import src.cron
+import src.commands
+import src.newspaper_subscription
 
 # TODO: Setup api caching using Redis
 # TODO: Add loading indicator on creating subscriptions

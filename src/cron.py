@@ -2,10 +2,8 @@ import pycron
 
 from config import bot
 from api.users import get_all_users
-from src.weather_subscription.main import get_weather_subscription_message_for_user
-from src.cryptocurrency_subscription.main import (
-    get_cryptocurrency_subscription_message_for_user,
-)
+from src.weather import get_weather_subscription_message_for_user
+from src.cryptocurrency import get_cryptocurrency_subscription_message_for_user
 
 
 @pycron.cron("0 9 * * *")

@@ -10,13 +10,8 @@ from constants import (
 from api.users import get_user_by_chat_id
 from api.newspaper_subscriptions import create_newspaper_subscription
 from api.cryptocurrency import get_cryptocurrency
-from src.weather_subscription.main import (
-    get_weather_by_city,
-    construct_message_from_weather_data,
-)
-from src.cryptocurrency_subscription.main import (
-    construct_message_from_cryptocurrency_data,
-)
+from src.weather import get_weather_by_city, construct_message_from_weather_data
+from src.cryptocurrency import construct_message_from_cryptocurrency_data
 
 
 class NewspaperSubscriptions:

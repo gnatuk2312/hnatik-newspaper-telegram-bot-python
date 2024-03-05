@@ -3,10 +3,8 @@ from telebot import types
 from config import bot
 from constants import NEWSPAPER_SUBSCRIPTIONS
 from api.users import get_user_by_chat_id, create_user
-from src.weather_subscription.main import get_weather_subscription_message_for_user
-from src.cryptocurrency_subscription.main import (
-    get_cryptocurrency_subscription_message_for_user,
-)
+from src.weather import get_weather_subscription_message_for_user
+from src.cryptocurrency import get_cryptocurrency_subscription_message_for_user
 
 
 class Commands:
