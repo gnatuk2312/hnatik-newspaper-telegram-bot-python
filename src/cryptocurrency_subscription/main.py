@@ -14,18 +14,18 @@ def construct_message_from_cryptocurrency_data(cryptocurrency, currency):
     return message
 
 
-def get_cryptocurrency_subscription_message_for_user(user):
+async def get_cryptocurrency_subscription_message_for_user(user):
     newspaper_messages_arr = [f"*{SubscriptionEnum.CRYPTOCURRENCY}*"]
 
     for newspaper_subscription in user["newspaper_subscriptions"]:
         subscription_type = newspaper_subscription["subscription_type"]
 
         if subscription_type != SubscriptionEnum.CRYPTOCURRENCY:
-            pass
+            continue
 
         try:
             params = newspaper_subscription["params"]
-            cryptocurrency = get_cryptocurrency(params).json()
+            cryptocurrency = await get_cryptocurrency(params)
 
             message = construct_message_from_cryptocurrency_data(cryptocurrency, params)
             newspaper_messages_arr.append(message)

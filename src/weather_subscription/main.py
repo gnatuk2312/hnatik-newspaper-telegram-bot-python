@@ -3,13 +3,13 @@ from api.coordinates import get_coordinates_by_city
 from api.weather import get_weather_by_coordinates
 
 
-def get_weather_by_city(city):
-    coordinates = get_coordinates_by_city(city).json()
+async def get_weather_by_city(city):
+    coordinates = await get_coordinates_by_city(city)
+
     latitude = coordinates[0]["latitude"]
     longitude = coordinates[0]["longitude"]
 
-    weather = get_weather_by_coordinates(latitude, longitude).json()
-    return weather
+    return await get_weather_by_coordinates(latitude, longitude)
 
 
 def construct_message_from_weather_data(weather, city):
@@ -30,18 +30,18 @@ def construct_message_from_weather_data(weather, city):
     return message
 
 
-def get_weather_subscription_message_for_user(user):
+async def get_weather_subscription_message_for_user(user):
     newspaper_messages_arr = [f"*{SubscriptionEnum.WEATHER}*"]
 
     for newspaper_subscription in user["newspaper_subscriptions"]:
         subscription_type = newspaper_subscription["subscription_type"]
 
         if subscription_type != SubscriptionEnum.WEATHER:
-            pass
+            continue
 
         try:
             params = newspaper_subscription["params"]
-            weather = get_weather_by_city(params)
+            weather = await get_weather_by_city(params)
             message = construct_message_from_weather_data(weather, params)
 
             newspaper_messages_arr.append(message)

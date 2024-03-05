@@ -10,8 +10,6 @@ from constants import (
 from api.users import get_user_by_chat_id
 from api.newspaper_subscriptions import create_newspaper_subscription
 from api.cryptocurrency import get_cryptocurrency
-from api.weather import get_weather_by_coordinates
-from api.coordinates import get_coordinates_by_city
 from src.weather_subscription.main import (
     get_weather_by_city,
     construct_message_from_weather_data,
@@ -30,23 +28,32 @@ class NewspaperSubscriptions:
         return False
 
     @bot.message_handler(func=is_newspaper_subscription)
-    def subscription(message):
+    async def subscription(message):
         chat_id = message.chat.id
         subscription = message.text
 
-        markup = types.ReplyKeyboardMarkup(resize_keyboard=True, one_time_keyboard=True)
+        try:
+            markup = types.ReplyKeyboardMarkup(
+                resize_keyboard=True, one_time_keyboard=True
+            )
 
-        for newspaper_subscription in NEWSPAPER_SUBSCRIPTIONS:
-            if newspaper_subscription["subscription"] == subscription:
-                for param in newspaper_subscription["params"]:
-                    button = types.KeyboardButton(param)
-                    markup.add(button)
+            for newspaper_subscription in NEWSPAPER_SUBSCRIPTIONS:
+                if newspaper_subscription["subscription"] == subscription:
+                    for param in newspaper_subscription["params"]:
+                        button = types.KeyboardButton(param)
+                        markup.add(button)
 
-        bot.send_message(
-            chat_id,
-            f'Що саме тебе цікавить на тему "{subscription}"?',
-            reply_markup=markup,
-        )
+            await bot.send_message(
+                chat_id,
+                f'Що саме тебе цікавить на тему "{subscription}"?',
+                reply_markup=markup,
+            )
+        except Exception as error:
+            print(f"NewspaperSubscriptions >> Exception occurred >> {error}")
+            await bot.send_message(
+                chat_id,
+                "Щось пішло не так... Зв'яжіться з адміністрацією - @gnatuk2312",
+            )
 
     @staticmethod
     def is_params_cryptocurrency(message):
@@ -56,33 +63,33 @@ class NewspaperSubscriptions:
         return False
 
     @bot.message_handler(func=is_params_cryptocurrency)
-    def cryptocurrency(message):
+    async def cryptocurrency(message):
         chat_id = message.chat.id
         currency = message.text
 
         try:
-            user = get_user_by_chat_id(chat_id).json()
-            create_newspaper_subscription(
+            user = await get_user_by_chat_id(chat_id)
+            await create_newspaper_subscription(
                 SubscriptionEnum.CRYPTOCURRENCY, currency, user["id"]
             )
 
-            cryptocurrency = get_cryptocurrency(currency).json()
+            cryptocurrency = await get_cryptocurrency(currency)
             message = construct_message_from_cryptocurrency_data(
                 cryptocurrency, currency
             )
 
-            bot.send_message(
+            await bot.send_message(
                 chat_id,
                 f"Підписка успішно створена! 👏 \nЯ додам інформацію про ціну {currency} у твою ранкову газету 🗞 \n\nP.S. Секція у газеті виглядатиме ось так:",
             )
-            bot.send_message(
+            await bot.send_message(
                 chat_id,
                 message,
                 parse_mode="Markdown",
             )
         except Exception as error:
-            print(f"Exception occurred >> {error}")
-            bot.send_message(
+            print(f"NewspaperSubscriptions >> Exception occurred >> {error}")
+            await bot.send_message(
                 chat_id,
                 "Щось пішло не так... Зв'яжіться з адміністрацією - @gnatuk2312",
             )
@@ -95,30 +102,32 @@ class NewspaperSubscriptions:
         return False
 
     @bot.message_handler(func=is_params_weather)
-    def weather(message):
+    async def weather(message):
         chat_id = message.chat.id
         city = message.text
 
         try:
-            user = get_user_by_chat_id(chat_id).json()
-            create_newspaper_subscription(SubscriptionEnum.WEATHER, city, user["id"])
+            user = await get_user_by_chat_id(chat_id)
+            await create_newspaper_subscription(
+                SubscriptionEnum.WEATHER, city, user["id"]
+            )
 
-            weather = get_weather_by_city(city)
+            weather = await get_weather_by_city(city)
             message = construct_message_from_weather_data(weather, city)
 
-            bot.send_message(
+            await bot.send_message(
                 chat_id,
                 f"Підписка успішно створена! 👏 \nЯ додам інформацію про погоду у місті {city} у твою ранкову газету 🗞 \n\nP.S. Секція у газеті виглядатиме ось так:",
             )
-            bot.send_message(
+            await bot.send_message(
                 chat_id,
                 message,
                 parse_mode="Markdown",
             )
 
         except Exception as error:
-            print(f"Exception occurred >> {error}")
-            bot.send_message(
+            print(f"NewspaperSubscriptions >> Exception occurred >> {error}")
+            await bot.send_message(
                 chat_id,
                 "Щось пішло не так... Зв'яжіться з адміністрацією - @gnatuk2312",
             )

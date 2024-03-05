@@ -1,4 +1,4 @@
-import requests
+import aiohttp
 
 API_URL = "https://api.open-meteo.com"
 headers = {
@@ -6,7 +6,7 @@ headers = {
 }
 
 
-def get_weather_by_coordinates(latitude, longitude):
+async def get_weather_by_coordinates(latitude, longitude):
     url = API_URL + "/v1/forecast"
     params = {
         "latitude": latitude,
@@ -14,4 +14,6 @@ def get_weather_by_coordinates(latitude, longitude):
         "current": "temperature_2m,relative_humidity_2m,apparent_temperature,cloud_cover,wind_speed_10m",
     }
 
-    return requests.get(url, headers=headers, params=params)
+    async with aiohttp.ClientSession() as session:
+        async with session.get(url, params=params, headers=headers) as response:
+            return await response.json()

@@ -1,4 +1,4 @@
-import requests
+import aiohttp
 
 from config import COIN_MARKET_CAP_TOKEN
 
@@ -9,7 +9,10 @@ headers = {
 }
 
 
-def get_cryptocurrency(symbol):
+async def get_cryptocurrency(symbol):
     url = API_URL + "/v1/cryptocurrency/quotes/latest"
+    params = {"symbol": symbol}
 
-    return requests.get(url, headers=headers, params={"symbol": symbol})
+    async with aiohttp.ClientSession() as session:
+        async with session.get(url, params=params, headers=headers) as response:
+            return await response.json()

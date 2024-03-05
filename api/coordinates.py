@@ -1,4 +1,4 @@
-import requests
+import aiohttp
 
 from config import API_NINJAS_KEY
 
@@ -9,8 +9,10 @@ headers = {
 }
 
 
-def get_coordinates_by_city(city):
+async def get_coordinates_by_city(city):
     url = API_URL + "/v1/geocoding"
     params = {"country": "Ukraine", "city": city}
 
-    return requests.get(url, headers=headers, params=params)
+    async with aiohttp.ClientSession() as session:
+        async with session.get(url, params=params, headers=headers) as response:
+            return await response.json()

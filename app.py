@@ -1,14 +1,12 @@
-from config import bot
+import asyncio
+import pycron
+from multiprocessing import Process
 
+from config import bot
+import src.cron.main
 import src.commands.main
 import src.newspaper_subscriptions.main
 
-# DONE: Add menu with commands
-# DONE: Refactor code
-# DONE: Add more options for weather and cryptocurrency
-# DONE: Translate all texts into Ukrainian
-# DONE: create logic which can take user and send all data that user subscribed on
-# TODO: Setup CRON, map through all users and call function which can send subscribed data
 # TODO: Setup api caching using Redis
 # TODO: Add loading indicator on creating subscriptions
 # TODO: Host two app on production
@@ -17,5 +15,21 @@ import src.newspaper_subscriptions.main
 # TODO: Add /deletesubscription command
 # TODO: Add CURRENCY subscription type
 
-print("Bot is running!")
-bot.infinity_polling()
+
+def __run_bot():
+    print("Bot is running!")
+    asyncio.run(bot.polling(non_stop=True))
+
+
+def __run_cron():
+    print("Cron is running!")
+    pycron.start()
+
+
+async def bootstrap():
+    Process(target=__run_cron).start()
+    Process(target=__run_bot).start()
+
+
+if __name__ == "__main__":
+    asyncio.run(bootstrap())

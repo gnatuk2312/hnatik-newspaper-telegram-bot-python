@@ -1,4 +1,4 @@
-import requests
+import aiohttp
 import json
 
 from config import API_URL
@@ -7,19 +7,23 @@ from config import API_URL
 headers = {"Content-Type": "application/json"}
 
 
-def get_all_users():
+async def get_all_users():
     url = API_URL + "/users"
 
-    return requests.get(url, headers=headers)
+    async with aiohttp.ClientSession() as session:
+        async with session.get(url, headers=headers) as response:
+            return await response.json()
 
 
-def get_user_by_chat_id(chat_id):
+async def get_user_by_chat_id(chat_id):
     url = API_URL + f"/users/chat/{chat_id}"
 
-    return requests.get(url, headers=headers)
+    async with aiohttp.ClientSession() as session:
+        async with session.get(url, headers=headers) as response:
+            return await response.json()
 
 
-def create_user(username, first_name, last_name, chat_id):
+async def create_user(username, first_name, last_name, chat_id):
     url = API_URL + "/users"
 
     user = {
@@ -30,4 +34,6 @@ def create_user(username, first_name, last_name, chat_id):
     }
     data = json.dumps(user)
 
-    return requests.post(url, data=data, headers=headers)
+    async with aiohttp.ClientSession() as session:
+        async with session.post(url, data=data, headers=headers) as response:
+            return await response.json()
