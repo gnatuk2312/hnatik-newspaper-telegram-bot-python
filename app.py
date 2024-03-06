@@ -8,7 +8,7 @@ import src.cron
 import src.commands
 import src.newspaper_subscription
 
-# TODO: Setup api caching using Redis
+# DONE: Setup api caching using Redis
 # TODO: Add loading indicator on creating subscriptions
 # TODO: Host two app on production
 # TODO: Add /deleteallsubscriptions command
