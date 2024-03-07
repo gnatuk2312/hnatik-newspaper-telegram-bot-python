@@ -7,6 +7,7 @@ from constants import (
     PARAMS_WEATHER,
     NEWSPAPER_SUBSCRIPTIONS,
 )
+from .bot_messages import BotMessages
 from api.users import get_user_by_chat_id
 from api.newspaper_subscriptions import create_newspaper_subscription
 from api.cryptocurrency import get_cryptocurrency
@@ -45,10 +46,7 @@ class NewspaperSubscriptions:
             )
         except Exception as error:
             print(f"NewspaperSubscriptions >> Exception occurred >> {error}")
-            await bot.send_message(
-                chat_id,
-                "Щось пішло не так... Зв'яжіться з адміністрацією - @gnatuk2312",
-            )
+            await BotMessages.send_exception_message(chat_id)
 
     @staticmethod
     def is_params_cryptocurrency(message):
@@ -63,6 +61,8 @@ class NewspaperSubscriptions:
         currency = message.text
 
         try:
+            loading_message = await BotMessages.send_loading_message(chat_id)
+
             user = await get_user_by_chat_id(chat_id)
             await create_newspaper_subscription(
                 SubscriptionEnum.CRYPTOCURRENCY, currency, user["id"]
@@ -72,6 +72,8 @@ class NewspaperSubscriptions:
             message = construct_message_from_cryptocurrency_data(
                 cryptocurrency, currency
             )
+
+            await bot.delete_message(chat_id, loading_message.id)
 
             await bot.send_message(
                 chat_id,
@@ -84,10 +86,7 @@ class NewspaperSubscriptions:
             )
         except Exception as error:
             print(f"NewspaperSubscriptions >> Exception occurred >> {error}")
-            await bot.send_message(
-                chat_id,
-                "Щось пішло не так... Зв'яжіться з адміністрацією - @gnatuk2312",
-            )
+            await BotMessages.send_exception_message(chat_id)
 
     @staticmethod
     def is_params_weather(message):
@@ -102,6 +101,8 @@ class NewspaperSubscriptions:
         city = message.text
 
         try:
+            loading_message = await BotMessages.send_loading_message(chat_id)
+
             user = await get_user_by_chat_id(chat_id)
             await create_newspaper_subscription(
                 SubscriptionEnum.WEATHER, city, user["id"]
@@ -109,6 +110,8 @@ class NewspaperSubscriptions:
 
             weather = await get_weather_by_city(city)
             message = construct_message_from_weather_data(weather, city)
+
+            await bot.delete_message(chat_id, loading_message.id)
 
             await bot.send_message(
                 chat_id,
@@ -122,7 +125,4 @@ class NewspaperSubscriptions:
 
         except Exception as error:
             print(f"NewspaperSubscriptions >> Exception occurred >> {error}")
-            await bot.send_message(
-                chat_id,
-                "Щось пішло не так... Зв'яжіться з адміністрацією - @gnatuk2312",
-            )
+            await BotMessages.send_exception_message(chat_id)

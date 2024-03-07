@@ -2,6 +2,7 @@ from telebot import types
 
 from config import bot
 from constants import NEWSPAPER_SUBSCRIPTIONS
+from .bot_messages import BotMessages
 from api.users import get_user_by_chat_id, create_user
 from src.weather import get_weather_subscription_message_for_user
 from src.cryptocurrency import get_cryptocurrency_subscription_message_for_user
@@ -41,7 +42,7 @@ class Commands:
     async def read_newspaper(message):
         chat_id = message.chat.id
 
-        loading_message = await bot.send_message(chat_id, "Завантаження ⏳")
+        loading_message = await BotMessages.send_loading_message(chat_id)
 
         user = await get_user_by_chat_id(chat_id)
         if not user:

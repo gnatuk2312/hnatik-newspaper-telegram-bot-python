@@ -8,13 +8,13 @@ import src.cron
 import src.commands
 import src.newspaper_subscription
 
-# DONE: Setup api caching using Redis
-# TODO: Add loading indicator on creating subscriptions
+# DONE: Add loading indicator on creating subscriptions
 # TODO: Host two app on production
 # TODO: Add /deleteallsubscriptions command
 # TODO: Add /help command
 # TODO: Add /deletesubscription command
 # TODO: Add CURRENCY subscription type
+# TODO: Add error logging
 
 
 def __run_bot():
