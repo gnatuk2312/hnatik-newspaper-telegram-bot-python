@@ -18,7 +18,7 @@ class Commands:
         last_name = chat.last_name
 
         user = await get_user_by_chat_id(chat_id)
-        if not user:
+        if user == None:
             await create_user(username, first_name, last_name, chat_id)
 
         await bot.send_message(

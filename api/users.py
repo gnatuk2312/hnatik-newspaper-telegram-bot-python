@@ -20,7 +20,11 @@ async def get_user_by_chat_id(chat_id):
 
     async with aiohttp.ClientSession() as session:
         async with session.get(url, headers=headers) as response:
-            return await response.json()
+            try:
+                return await response.json()
+            except:
+                return None
+                
 
 
 async def create_user(username, first_name, last_name, chat_id):
