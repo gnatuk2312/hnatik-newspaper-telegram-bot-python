@@ -4,6 +4,7 @@ from config import bot
 from constants import NEWSPAPER_SUBSCRIPTIONS
 from .bot_messages import BotMessages
 from api.users import get_user_by_chat_id, create_user
+from api.newspaper_subscriptions import delete_all_newspaper_subscriptions_by_user_id
 from src.weather import get_weather_subscription_message_for_user
 from src.cryptocurrency import get_cryptocurrency_subscription_message_for_user
 
@@ -62,3 +63,23 @@ class Commands:
         await bot.send_message(chat_id, cryptocurrency_message, parse_mode="markdown")
 
         await bot.delete_message(chat_id, loading_message.id)
+
+    @bot.message_handler(commands=["deleteallsubscriptions"])
+    async def delete_all_subscriptions(message):
+        chat_id = message.chat.id
+
+        loading_message = await BotMessages.send_loading_message(chat_id)
+
+        user = await get_user_by_chat_id(chat_id)
+        if user == None:
+            await bot.delete_message(chat_id, loading_message.id)
+            await BotMessages.send_exception_message(chat_id)
+            return
+
+        await delete_all_newspaper_subscriptions_by_user_id(user["id"])
+
+        await bot.delete_message(chat_id, loading_message.id)
+        await bot.send_message(
+            chat_id,
+            "Усі підписки на газету успішно видалено!\n\nСкористуйся командою /addsubscription та оформи першу підписку на цікаву для тебе тему 😉",
+        )
