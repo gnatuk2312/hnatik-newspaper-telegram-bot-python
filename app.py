@@ -18,7 +18,7 @@ import src.newspaper_subscription
 
 def __run_bot():
     print("Bot is running!")
-    asyncio.run(bot.polling(non_stop=True))
+    asyncio.run(bot.polling())
 
 
 def __run_cron():
