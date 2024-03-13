@@ -15,6 +15,11 @@ async def send_newspaper_to_all_users(timestamp):
 
     for user in users:
         chat_id = user["chat_id"]
+        first_name = user["first_name"]
+
+        await bot.send_message(
+            chat_id, f"Добрий ранок, {first_name}🌅\nОсь твоя ранкова газета 📰"
+        )
 
         weather_message = await get_weather_subscription_message_for_user(user)
         await bot.send_message(chat_id, weather_message, parse_mode="markdown")
