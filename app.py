@@ -8,11 +8,9 @@ import src.cron
 import src.commands
 import src.newspaper_subscription
 
-# DONE: Host two app on production
-# DONE: Add /deleteallsubscriptions command
 # TODO: Add /help command
 # TODO: Add /deletesubscription command
-# TODO: Add CURRENCY subscription type
+# DONE: Add CURRENCY subscription type
 # TODO: Add error logging
 
 

@@ -6,6 +6,7 @@ from .bot_messages import BotMessages
 from api.users import get_user_by_chat_id, create_user
 from api.newspaper_subscriptions import delete_all_newspaper_subscriptions_by_user_id
 from src.weather import get_weather_subscription_message_for_user
+from src.currency import get_currency_subscription_message_for_user
 from src.cryptocurrency import get_cryptocurrency_subscription_message_for_user
 
 
@@ -56,6 +57,9 @@ class Commands:
 
         weather_message = await get_weather_subscription_message_for_user(user)
         await bot.send_message(chat_id, weather_message, parse_mode="markdown")
+
+        currency_message = await get_currency_subscription_message_for_user(user)
+        await bot.send_message(chat_id, currency_message, parse_mode="markdown")
 
         cryptocurrency_message = await get_cryptocurrency_subscription_message_for_user(
             user
