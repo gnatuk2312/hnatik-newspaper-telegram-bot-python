@@ -14,9 +14,9 @@ class Commands:
     async def start(message):
         chat = message.chat
         chat_id = chat.id
-        username = chat.username
-        first_name = chat.first_name
-        last_name = chat.last_name
+        username = str(chat.username or "Друг")
+        first_name = str(chat.first_name or "Друг")
+        last_name = str(chat.last_name or "")
 
         user = await get_user_by_chat_id(chat_id)
         if user == None:
