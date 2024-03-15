@@ -22,7 +22,7 @@ PARAMS_CURRENCY = [
     "Австралійський долар",
     "Швейцарський франк",
 ]
-PARAMS_CRYPTOCURRENCY = ["BTC", "ETH", "BNB", "SOL", "XRP"]
+PARAMS_CRYPTOCURRENCY = ["BTC", "ETH", "BNB", "NEAR", "SOL", "XRP"]
 
 
 NEWSPAPER_SUBSCRIPTIONS = [

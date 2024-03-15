@@ -10,7 +10,6 @@ import src.newspaper_subscription
 
 # TODO: Add /help command
 # TODO: Add /deletesubscription command
-# DONE: Add CURRENCY subscription type
 # TODO: Add error logging
 
 
