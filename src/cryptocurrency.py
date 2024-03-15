@@ -4,9 +4,12 @@ from api.cryptocurrency import get_cryptocurrency
 
 def construct_message_from_cryptocurrency_data(cryptocurrency, currency):
     price = cryptocurrency["data"][currency]["quote"]["USD"]["price"]
+    round_price = round(price)
 
-    if round(price) > 1:
-        price = round(price)
+    if round_price > 50:
+        price = round_price
+    elif round_price <= 50 and round_price > 1:
+        price = round(price, 2)
     else:
         price = round(price, 4)
 
